@@ -5,10 +5,19 @@ const dotenv = require('dotenv').config()
 
 //middleware for json decoding
 app.use(express.json())
+//serve static file from the public folder
+app.use(express.static('public'))
+
 //fire up the server
 app.listen(
     process.env.PORT
 )
+
+//default page
+// serve the homepage
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
 
 app.get('/results/:token', async (req, res) => {
     //get token from request
