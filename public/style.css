@@ -5,8 +5,14 @@ html,body{
 }
 
 html {
-    font-size: 16px;
+    font-size: 12px;
+    line-height: 1.5;
+    font-family: 'Roboto Mono', monospace;
 }
+
+*, *:before, *:after {
+    box-sizing: border-box;
+  }
 
 .container{
     height:100%;
@@ -16,31 +22,130 @@ html {
     align-items: center;
 }
 
+.result-container{
+    height:100%;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 
 #description{
     padding-left:40px;
     padding-right: 40px;
 }
 
-h1{
-    font-size: 2.5rem;
-}
-h2{
-    font-size: 2rem;
-}
-h3{
-    font-size: 1.75rem;
-}
-h4{
-    font-size:1.5rem;
-}
-p{
-    font-size: 1rem;
+.display{
+    font-size:4em;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
+.results{
+    display: flex;
+    flex-direction: row;
+    margin:0;
+    width:100%;
+
+}
+
+.results div{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.results div div{
+    display: flex;
+    flex-direction: row;
+}
+
+.results div div h5{
+    margin: 0;
+}
+
+.results-word{
+    justify-content: end;
+}
+
+.results-answer{
+    justify-content: start;
+}
+.results-time{
+    justify-content: start;
+}
+
+
+h1{
+    font-size: 2.5em;
+}
+h2{
+    font-size: 2em;
+}
+h3{
+    font-size: 1.75em;
+}
+h4{
+    font-size:1.5em;
+}
+h5{
+    font-size: 1.25em;
+}
+p{
+    font-size: 1em;
+}
+
+button {
+    background-color: white;
+    border: 3px solid;
+    border-radius: 5px;
+    border-color: #68d2e8;
+    color:#68d2e8;
+    padding: 14px 28px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+  }
+  
+  button:hover {
+    background-color: 	#68d2e8;
+    color: white;
+  }
+
+  input[type="text"] {
+    width:250px;
+    background-color: white;
+    border: 3px solid;
+    border-radius: 5px;
+    border-color: #68d2e8;
+    color:#68d2e8;
+    padding: 0.25em 0.5em;
+    margin: 20px;
+    font-size: 2em;
+    font-family: inherit;
+  }
+
+  input[type="text"]:focus {
+    outline:none;
+    box-shadow: 0 0 0 2px rgba(21, 156, 228, 0.4);
+  }
+
 @media only screen and (min-width: 992px) {
+    html {
+        font-size: 16px;
+    }
+    
     #description{
         padding:0;
         width:60%;
+    }
+
+    .results{
+        padding: 0;
+        width:600px;
     }
 }

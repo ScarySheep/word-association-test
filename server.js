@@ -19,6 +19,40 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/wordlists', async (req, res) => {
+    //google auth
+    const auth = await google.auth.getClient({ scopes: ['https://www.googleapis.com/auth/spreadsheets'] })
+    const sheets = google.sheets({ version: 'v4', auth })
+    //get the key column
+    const range = `Sheet1!B1:Y1`
+    const response = await sheets.spreadsheets.values.get({
+        spreadsheetId: process.env.SHEET_ID,
+        range,
+    })
+    res.send(response.data.values[0])
+})
+
+let data
+app.post('/test', async (req, res) => {
+    data = req.body
+    res.status(200).send('success')
+    //google auth
+    /*const auth = await google.auth.getClient({ scopes: ['https://www.googleapis.com/auth/spreadsheets'] })
+    const sheets = google.sheets({ version: 'v4', auth })
+    //get the key column
+    const range = `Sheet1!B1:Y1`
+    const response = await sheets.spreadsheets.values.get({
+        spreadsheetId: process.env.SHEET_ID,
+        range,
+    })
+    res.send(response.data.values[0])*/
+})
+
+app.get('/result', async (req, res) => {
+    res.send(data)
+})
+
+
 app.get('/results/:token', async (req, res) => {
     //get token from request
     const { token } = req.params

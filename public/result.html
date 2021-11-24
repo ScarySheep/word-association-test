@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <!--mobile scaling-->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!--google font-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+        <!--custom css-->
+        <link rel="stylesheet" href="style.css">
+        <!--jquery-->
+        <script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div class="result-container">
+            <p class="error"></p>
+            <h1 class="display">Result</h1>
+            <div class="results">
+                <div>
+                    <div class="results-word">                    
+                        <h5 id='word-0'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-1'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-2'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-3'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-4'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-5'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-6'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-7'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-8'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-9'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-10'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-11'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-12'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-13'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-14'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-15'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-16'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-17'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-18'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-19'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-20'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-21'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-22'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                    <div class="results-word">                    
+                        <h5 id='word-23'></h5>
+                        <h5>:&nbsp;&nbsp;&nbsp;</h5>
+                    </div>
+                </div>
+                <div>
+                    <div class="results-answer">  
+                        <h5 id='ans-0'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-1'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-2'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-3'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-4'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-5'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-6'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-7'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-8'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-9'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-10'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-11'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-12'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-13'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-14'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-15'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-16'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-17'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-18'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-19'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-20'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-21'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-22'></h5>
+                    </div>
+                    <div class="results-answer">  
+                        <h5 id='ans-23'></h5>
+                    </div>
+                </div>
+                <div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-0'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-1'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-2'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-3'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-4'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-5'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-6'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-7'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-8'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-9'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-10'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-11'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-12'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-13'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-14'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-15'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-16'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-17'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-18'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-19'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-20'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-21'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-22'></h5>
+                    </div>
+                    <div class="results-time">                    
+                        <h5> &nbsp;time: </h5>
+                        <h5 class="time" id='time-23'></h5>
+                    </div>
+                </div>
+            </div>
+        </div>        
+        <script src='./result.js'></script>
+    </body>
+</html>
