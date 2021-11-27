@@ -21,13 +21,15 @@ function nextWord () {
         if (currentWord == 23) {
             let token = Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6);
             let body = { token: token, data: ans }
-            console.log(body)
+            let strBody = JSON.stringify(body)
+            // Store
+            sessionStorage.setItem('result', strBody);
             fetch('/test', {
                 method: 'POST', // or 'PUT'
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(body)
+                body: strBody
             })
                 .then(function (response) {
                     if (response.ok) {

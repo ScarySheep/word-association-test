@@ -28,28 +28,42 @@ app.get('/wordlists', async (req, res) => {
     const response = await sheets.spreadsheets.values.get({
         spreadsheetId: process.env.SHEET_ID,
         range,
+    }, (err, result) => {
+        if (err) {
+            // Handle error
+            console.log(err);
+        } else {
+            res.status(200).send(result.data.values[0])
+        }
     })
-    res.send(response.data.values[0])
 })
 
-let data
 app.post('/test', async (req, res) => {
-    data = req.body
-    res.status(200).send('success')
+    let data = req.body.data
+    let token = req.body.token
+    let answer = data.map(d => d.answer)
+    let time = data.map(d => d.time)
+    answer.unshift(token)
+    time.unshift(`${token}-time`)
     //google auth
-    /*const auth = await google.auth.getClient({ scopes: ['https://www.googleapis.com/auth/spreadsheets'] })
+    const auth = await google.auth.getClient({ scopes: ['https://www.googleapis.com/auth/spreadsheets'] })
     const sheets = google.sheets({ version: 'v4', auth })
     //get the key column
-    const range = `Sheet1!B1:Y1`
-    const response = await sheets.spreadsheets.values.get({
+    const range = `Sheet1!A1`
+    const response = await sheets.spreadsheets.values.append({
         spreadsheetId: process.env.SHEET_ID,
         range,
+        valueInputOption: 'RAW',
+        resource: { values: [answer, time] }
+    }, (err, result) => {
+        if (err) {
+            // Handle error
+            console.log(err);
+        } else {
+            res.status(200).send('success')
+            console.log('%d cells updated on range: %s', result.data.updates.updatedCells, result.data.updates.updatedRange);
+        }
     })
-    res.send(response.data.values[0])*/
-})
-
-app.get('/result', async (req, res) => {
-    res.send(data)
 })
 
 
@@ -86,6 +100,4 @@ app.get('/results/:token', async (req, res) => {
     } else {
         res.send({ result: 'no data' })
     }
-
-
 })
