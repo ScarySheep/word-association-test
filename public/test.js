@@ -4,6 +4,7 @@ let time = []
 let showTime = 0
 let currentWord = 0
 
+//get wordlists from server
 fetch('/wordlists', { method: 'GET' })
     .then(function (response) {
         if (response.ok) return response.json()
@@ -15,23 +16,30 @@ fetch('/wordlists', { method: 'GET' })
         $('#word').text(wordlists[currentWord])
         showTime = Date.now()
     })
-
+//simulate enter as button press
+$('#answer').keypress(function (e) {
+    if (e.which == 13) {
+        $('#next').click();
+        return false;
+    }
+});
+//onclick
 function nextWord () {
+    //if wordlists is fetched
     if (wordlists.length > 0) {
         let currentAnswer = $.trim($('#answer').val())
+        //check if there is an answer
         if (currentAnswer.length > 0) {
             $('.error').text(' ')
             answer.push(currentAnswer)
             time.push(Date.now() - showTime)
+            //last word
             if (currentWord == 23) {
                 let token = Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6);
                 let body = { token: token, answer: answer, time: time }
                 let strBody = JSON.stringify(body)
-                let strWordlists = JSON.stringify(wordlists)
-                // Store
-                sessionStorage.setItem('wordlists', strWordlists)
-                sessionStorage.setItem('result', strBody)
-                fetch('/test', {
+                // store it back to server
+                fetch('/store', {
                     method: 'POST', // or 'PUT'
                     headers: {
                         'Content-Type': 'application/json',
@@ -40,7 +48,8 @@ function nextWord () {
                 })
                     .then(function (response) {
                         if (response.ok) {
-                            console.log('Result was recorded');
+                            //if data is successfully stored, redirect to result page
+                            window.location.href = `https://word-association-test.herokuapp.com/results/${token}`;
                             return;
                         }
                         throw new Error('Request failed.');
@@ -48,8 +57,8 @@ function nextWord () {
                     .catch(function (error) {
                         console.log(error);
                     });
-                window.location.href = `https://word-association-test.herokuapp.com/results/${token}`;
             }
+            //iterating
             $('#answer').val('')
             currentWord++
             $('#word').text(wordlists[currentWord])
@@ -60,9 +69,10 @@ function nextWord () {
     } else {
         $('.error').text('Wait for the word to load plz :)')
     }
-
 }
-function shuffle (array) {
+
+//array shuffle function for future use
+/*function shuffle (array) {
     let currentIndex = array.length, randomIndex;
 
     // While there remain elements to shuffle...
@@ -78,4 +88,4 @@ function shuffle (array) {
     }
 
     return array;
-}
+}*/

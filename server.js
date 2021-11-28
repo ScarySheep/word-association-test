@@ -15,12 +15,7 @@ app.listen(
     process.env.PORT
 )
 
-//default page
-// serve the homepage
-/*app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-});*/
-
+//get wordlists
 app.get('/wordlists', async (req, res) => {
     //google auth
     const auth = await google.auth.getClient({ scopes: ['https://www.googleapis.com/auth/spreadsheets'] })
@@ -40,38 +35,45 @@ app.get('/wordlists', async (req, res) => {
     })
 })
 
-app.post('/test', async (req, res) => {
+//
+app.post('/store', async (req, res) => {
     let token = req.body.token
     let answer = req.body.answer
     let time = req.body.time
-    answer.unshift(token)
-    time.unshift(`${token}-time`)
-    //google auth
-    const auth = await google.auth.getClient({ scopes: ['https://www.googleapis.com/auth/spreadsheets'] })
-    const sheets = google.sheets({ version: 'v4', auth })
-    //get the key column
-    const range = `Sheet1!A1`
-    const response = await sheets.spreadsheets.values.append({
-        spreadsheetId: process.env.SHEET_ID,
-        range,
-        valueInputOption: 'RAW',
-        resource: { values: [answer, time] }
-    }, (err, result) => {
-        if (err) {
-            // Handle error
-            console.log(err);
-        } else {
-            res.status(200).send('success')
-            console.log('%d cells updated on range: %s', result.data.updates.updatedCells, result.data.updates.updatedRange);
-        }
-    })
+    //basic check
+    if ((typeof token === 'string' || token instanceof String) && token.length == 8 && answer.length == 24 && time.length == 24) {
+        answer.unshift(token)
+        time.unshift(`${token}-time`)
+        //google auth
+        const auth = await google.auth.getClient({ scopes: ['https://www.googleapis.com/auth/spreadsheets'] })
+        const sheets = google.sheets({ version: 'v4', auth })
+        //get the key column
+        const range = `Sheet1!A1`
+        const response = await sheets.spreadsheets.values.append({
+            spreadsheetId: process.env.SHEET_ID,
+            range,
+            valueInputOption: 'RAW',
+            resource: { values: [answer, time] }
+        }, (err, result) => {
+            if (err) {
+                // Handle error
+                console.log(err);
+                res.status(400).send('problem occured when storing data')
+            } else {
+                res.status(200).send('success')
+                console.log('%d cells updated on range: %s', result.data.updates.updatedCells, result.data.updates.updatedRange);
+            }
+        })
+    } else {
+        res.status(400).send('wrong format')
+    }
 })
 
 
 app.get('/results/:token', async (req, res) => {
     //get token from request
     const { token } = req.params
-    //basic check
+    //basic token check
     if ((typeof token === 'string' || token instanceof String) && token.length == 8) {
         //google auth
         const auth = await google.auth.getClient({ scopes: ['https://www.googleapis.com/auth/spreadsheets'] })
@@ -88,6 +90,7 @@ app.get('/results/:token', async (req, res) => {
         //check if token exist
         const index = keys.indexOf(token)
         if (index != -1) {
+            //get data by token
             const wordlistsRange = `Sheet1!B1:Y1`
             const resultRange = `Sheet1!B${index + 1}:Y${index + 2}`
             const resultResponse = await sheets.spreadsheets.values.batchGet({
@@ -99,13 +102,24 @@ app.get('/results/:token', async (req, res) => {
             let wordlist = result[0].values[0]
             let answer = result[1].values[0]
             let time = result[1].values[1]
+            //find min and max time
+            let minTime = time.indexOf(String(Math.min(...time)))
+            let maxTime = time.indexOf(String(Math.max(...time)))
+            //declare ejs variables
             let renderVar = {}
             for (let i = 0; i < 24; i++) {
                 renderVar[`word${i}`] = wordlist[i]
                 renderVar[`answer${i}`] = answer[i]
-                renderVar[`time${i}`] = time[i]
+                if (i == minTime) {
+                    renderVar[`time${i}`] = `<h5 class="time" style="color:green">${time[i]}</h5>`
+                } else if (i == maxTime) {
+                    renderVar[`time${i}`] = `<h5 class="time" style="color:red">${time[i]}</h5>`
+                } else {
+                    renderVar[`time${i}`] = `<h5 class="time">${time[i]}</h5>`
+                }
             }
             renderVar.link = `https://word-association-test.herokuapp.com/results/${token}`
+            //render dynamic html page to frontend
             res.render('results', renderVar)
         } else {
             res.status(404).send({ result: 'no data' })
