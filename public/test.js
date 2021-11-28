@@ -1,5 +1,6 @@
 let wordlists = []
-let ans = []
+let answer = []
+let time = []
 let showTime = 0
 let currentWord = 0
 
@@ -17,36 +18,47 @@ fetch('/wordlists', { method: 'GET' })
 
 function nextWord () {
     if (wordlists.length > 0) {
-        ans.push({ answer: $('#answer').val(), time: Date.now() - showTime })
-        if (currentWord == 23) {
-            let token = Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6);
-            let body = { token: token, data: ans }
-            let strBody = JSON.stringify(body)
-            // Store
-            sessionStorage.setItem('result', strBody);
-            fetch('/test', {
-                method: 'POST', // or 'PUT'
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: strBody
-            })
-                .then(function (response) {
-                    if (response.ok) {
-                        console.log('Result was recorded');
-                        return;
-                    }
-                    throw new Error('Request failed.');
+        let currentAnswer = $.trim($('#answer').val())
+        if (currentAnswer.length > 0) {
+            $('.error').text(' ')
+            answer.push(currentAnswer)
+            time.push(Date.now() - showTime)
+            if (currentWord == 23) {
+                let token = Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6);
+                let body = { token: token, answer: answer, time: time }
+                let strBody = JSON.stringify(body)
+                let strWordlists = JSON.stringify(wordlists)
+                // Store
+                sessionStorage.setItem('wordlists', strWordlists)
+                sessionStorage.setItem('result', strBody)
+                fetch('/test', {
+                    method: 'POST', // or 'PUT'
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: strBody
                 })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            window.location.href = "./result.html";
+                    .then(function (response) {
+                        if (response.ok) {
+                            console.log('Result was recorded');
+                            return;
+                        }
+                        throw new Error('Request failed.');
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                window.location.href = `https://word-association-test.herokuapp.com/results/${token}`;
+            }
+            $('#answer').val('')
+            currentWord++
+            $('#word').text(wordlists[currentWord])
+            showTime = Date.now()
+        } else {
+            $('.error').text('Type something at least plz :)')
         }
-        $('#answer').val('')
-        currentWord++
-        $('#word').text(wordlists[currentWord])
-        showTime = Date.now()
+    } else {
+        $('.error').text('Wait for the word to load plz :)')
     }
 
 }

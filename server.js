@@ -1,5 +1,6 @@
 const { google } = require('googleapis')
 const express = require('express')
+const { render } = require('ejs')
 const app = express()
 const dotenv = require('dotenv').config()
 
@@ -7,7 +8,8 @@ const dotenv = require('dotenv').config()
 app.use(express.json())
 //serve static file from the public folder
 app.use(express.static('public'))
-
+//use ejs for dynamic html
+app.set("view engine", "ejs");
 //fire up the server
 app.listen(
     process.env.PORT
@@ -15,9 +17,9 @@ app.listen(
 
 //default page
 // serve the homepage
-app.get('/', (req, res) => {
+/*app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
-});
+});*/
 
 app.get('/wordlists', async (req, res) => {
     //google auth
@@ -39,10 +41,9 @@ app.get('/wordlists', async (req, res) => {
 })
 
 app.post('/test', async (req, res) => {
-    let data = req.body.data
     let token = req.body.token
-    let answer = data.map(d => d.answer)
-    let time = data.map(d => d.time)
+    let answer = req.body.answer
+    let time = req.body.time
     answer.unshift(token)
     time.unshift(`${token}-time`)
     //google auth
@@ -87,17 +88,29 @@ app.get('/results/:token', async (req, res) => {
         //check if token exist
         const index = keys.indexOf(token)
         if (index != -1) {
+            const wordlistsRange = `Sheet1!B1:Y1`
             const resultRange = `Sheet1!B${index + 1}:Y${index + 2}`
-            const resultResponse = await sheets.spreadsheets.values.get({
+            const resultResponse = await sheets.spreadsheets.values.batchGet({
                 spreadsheetId: process.env.SHEET_ID,
-                range: resultRange,
+                ranges: [wordlistsRange, resultRange],
             })
-
-            res.send({ result: resultResponse.data.values })
+            //formatting
+            let result = resultResponse.data.valueRanges
+            let wordlist = result[0].values[0]
+            let answer = result[1].values[0]
+            let time = result[1].values[1]
+            let renderVar = {}
+            for (let i = 0; i < 24; i++) {
+                renderVar[`word${i}`] = wordlist[i]
+                renderVar[`answer${i}`] = answer[i]
+                renderVar[`time${i}`] = time[i]
+            }
+            renderVar.link = `https://word-association-test.herokuapp.com/results/${token}`
+            res.render('results', renderVar)
         } else {
-            res.send({ result: 'no data' })
+            res.status(404).send({ result: 'no data' })
         }
     } else {
-        res.send({ result: 'no data' })
+        res.status(404).send({ result: 'no data' })
     }
 })
