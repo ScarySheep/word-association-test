@@ -27,7 +27,7 @@ $('#answer').keypress(function (e) {
 function nextWord () {
     //if wordlists is fetched
     if (wordlists.length > 0) {
-        let currentAnswer = $.trim($('#answer').val())
+        let currentAnswer = $.trim($('#answer').val()).toLowerCase()
         //check if there is an answer
         if (currentAnswer.length > 0) {
             $('.error').text(' ')
