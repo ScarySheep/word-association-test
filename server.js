@@ -111,11 +111,11 @@ app.get('/result/:token', async (req, res) => {
                 renderVar[`word${i}`] = wordlist[i]
                 renderVar[`answer${i}`] = answer[i]
                 if (i == minTime) {
-                    renderVar[`time${i}`] = `<h5 class="time" style="color:green">${time[i]}</h5>`
+                    renderVar[`time${i}`] = `<h5 class="time" style="color:green">${Math.round(time[i] / 10) / 100}s</h5>`
                 } else if (i == maxTime) {
-                    renderVar[`time${i}`] = `<h5 class="time" style="color:red">${time[i]}</h5>`
+                    renderVar[`time${i}`] = `<h5 class="time" style="color:red">${Math.round(time[i] / 10) / 100}s</h5>`
                 } else {
-                    renderVar[`time${i}`] = `<h5 class="time">${time[i]}</h5>`
+                    renderVar[`time${i}`] = `<h5 class="time">${Math.round(time[i] / 10) / 100}s</h5>`
                 }
             }
             renderVar.link = `https://word-association-test.herokuapp.com/result/${token}`
