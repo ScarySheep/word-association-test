@@ -42,8 +42,12 @@ app.post('/store', async (req, res) => {
     let time = req.body.time
     //basic check
     if ((typeof token === 'string' || token instanceof String) && token.length == 8 && answer.length == 20 && time.length == 20) {
+        //add header
         answer.unshift(token)
         time.unshift(`${token}-time`)
+        //get ip
+        let ip = req.socket.remoteAddress
+        answer.push(ip)
         //google auth
         const auth = await google.auth.getClient({ scopes: ['https://www.googleapis.com/auth/spreadsheets'] })
         const sheets = google.sheets({ version: 'v4', auth })
