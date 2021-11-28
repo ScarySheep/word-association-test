@@ -129,6 +129,6 @@ app.get('/result/:token', async (req, res) => {
             res.status(404).send({ result: 'no data' })
         }
     } else {
-        res.status(404).send({ result: 'no data' })
+        res.status(404).send({ result: 'Ummm I think you got the wrong token...' })
     }
 })
