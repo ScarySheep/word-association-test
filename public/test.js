@@ -34,7 +34,7 @@ function nextWord () {
             answer.push(currentAnswer)
             time.push(Date.now() - showTime)
             //last word
-            if (currentWord == 23) {
+            if (currentWord == 19) {
                 let token = Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6);
                 let body = { token: token, answer: answer, time: time }
                 let strBody = JSON.stringify(body)

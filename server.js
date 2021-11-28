@@ -21,7 +21,7 @@ app.get('/wordlist', async (req, res) => {
     const auth = await google.auth.getClient({ scopes: ['https://www.googleapis.com/auth/spreadsheets'] })
     const sheets = google.sheets({ version: 'v4', auth })
     //get the key column
-    const range = `wordlist!B1:Y1`
+    const range = `wordlist!B1:U1`
     const response = await sheets.spreadsheets.values.get({
         spreadsheetId: process.env.SHEET_ID,
         range,
@@ -41,7 +41,7 @@ app.post('/store', async (req, res) => {
     let answer = req.body.answer
     let time = req.body.time
     //basic check
-    if ((typeof token === 'string' || token instanceof String) && token.length == 8 && answer.length == 24 && time.length == 24) {
+    if ((typeof token === 'string' || token instanceof String) && token.length == 8 && answer.length == 20 && time.length == 20) {
         answer.unshift(token)
         time.unshift(`${token}-time`)
         //google auth
@@ -91,8 +91,8 @@ app.get('/result/:token', async (req, res) => {
         const index = keys.indexOf(token)
         if (index != -1) {
             //get data by token
-            const wordlistsRange = `wordlist!B1:Y1`
-            const resultRange = `response!B${index + 1}:Y${index + 2}`
+            const wordlistsRange = `wordlist!B1:U1`
+            const resultRange = `response!B${index + 1}:U${index + 2}`
             const resultResponse = await sheets.spreadsheets.values.batchGet({
                 spreadsheetId: process.env.SHEET_ID,
                 ranges: [wordlistsRange, resultRange],
@@ -107,7 +107,7 @@ app.get('/result/:token', async (req, res) => {
             let maxTime = time.indexOf(String(Math.max(...time)))
             //declare ejs variables
             let renderVar = {}
-            for (let i = 0; i < 24; i++) {
+            for (let i = 0; i < 20; i++) {
                 renderVar[`word${i}`] = `${wordlist[i]}:`
                 renderVar[`answer${i}`] = answer[i]
                 if (i == minTime) {
