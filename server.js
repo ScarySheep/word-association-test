@@ -108,7 +108,7 @@ app.get('/result/:token', async (req, res) => {
             //declare ejs variables
             let renderVar = {}
             for (let i = 0; i < 24; i++) {
-                renderVar[`word${i}`] = wordlist[i]
+                renderVar[`word${i}`] = `${wordlist[i]}:`
                 renderVar[`answer${i}`] = answer[i]
                 if (i == minTime) {
                     renderVar[`time${i}`] = `<h5 class="time" style="color:green">${Math.round(time[i] / 10) / 100}s</h5>`
