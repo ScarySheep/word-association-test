@@ -16,12 +16,12 @@ app.listen(
 )
 
 //get wordlists
-app.get('/wordlists', async (req, res) => {
+app.get('/wordlist', async (req, res) => {
     //google auth
     const auth = await google.auth.getClient({ scopes: ['https://www.googleapis.com/auth/spreadsheets'] })
     const sheets = google.sheets({ version: 'v4', auth })
     //get the key column
-    const range = `Sheet1!B1:Y1`
+    const range = `wordlist!B1:Y1`
     const response = await sheets.spreadsheets.values.get({
         spreadsheetId: process.env.SHEET_ID,
         range,
@@ -48,7 +48,7 @@ app.post('/store', async (req, res) => {
         const auth = await google.auth.getClient({ scopes: ['https://www.googleapis.com/auth/spreadsheets'] })
         const sheets = google.sheets({ version: 'v4', auth })
         //get the key column
-        const range = `Sheet1!A1`
+        const range = `response!A1`
         const response = await sheets.spreadsheets.values.append({
             spreadsheetId: process.env.SHEET_ID,
             range,
@@ -70,7 +70,7 @@ app.post('/store', async (req, res) => {
 })
 
 
-app.get('/results/:token', async (req, res) => {
+app.get('/result/:token', async (req, res) => {
     //get token from request
     const { token } = req.params
     //basic token check
@@ -79,7 +79,7 @@ app.get('/results/:token', async (req, res) => {
         const auth = await google.auth.getClient({ scopes: ['https://www.googleapis.com/auth/spreadsheets'] })
         const sheets = google.sheets({ version: 'v4', auth })
         //get the key column
-        const keyRange = `Sheet1!A:A`
+        const keyRange = `response!A:A`
         const keyResponse = await sheets.spreadsheets.values.get({
             spreadsheetId: process.env.SHEET_ID,
             range: keyRange,
@@ -91,8 +91,8 @@ app.get('/results/:token', async (req, res) => {
         const index = keys.indexOf(token)
         if (index != -1) {
             //get data by token
-            const wordlistsRange = `Sheet1!B1:Y1`
-            const resultRange = `Sheet1!B${index + 1}:Y${index + 2}`
+            const wordlistsRange = `wordlist!B1:Y1`
+            const resultRange = `response!B${index + 1}:Y${index + 2}`
             const resultResponse = await sheets.spreadsheets.values.batchGet({
                 spreadsheetId: process.env.SHEET_ID,
                 ranges: [wordlistsRange, resultRange],
@@ -118,9 +118,9 @@ app.get('/results/:token', async (req, res) => {
                     renderVar[`time${i}`] = `<h5 class="time">${time[i]}</h5>`
                 }
             }
-            renderVar.link = `https://word-association-test.herokuapp.com/results/${token}`
+            renderVar.link = `https://word-association-test.herokuapp.com/result/${token}`
             //render dynamic html page to frontend
-            res.render('results', renderVar)
+            res.render('result', renderVar)
         } else {
             res.status(404).send({ result: 'no data' })
         }

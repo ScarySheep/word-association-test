@@ -5,7 +5,7 @@ let showTime = 0
 let currentWord = 0
 
 //get wordlists from server
-fetch('/wordlists', { method: 'GET' })
+fetch('/wordlist', { method: 'GET' })
     .then(function (response) {
         if (response.ok) return response.json()
         $('.error').text('Something wrong with server plz contact https://github.com/ScarySheep/')
@@ -49,7 +49,7 @@ function nextWord () {
                     .then(function (response) {
                         if (response.ok) {
                             //if data is successfully stored, redirect to result page
-                            window.location.href = `https://word-association-test.herokuapp.com/results/${token}`;
+                            window.location.href = `https://word-association-test.herokuapp.com/result/${token}`;
                             return;
                         }
                         throw new Error('Request failed.');
