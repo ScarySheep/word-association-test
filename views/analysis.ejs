@@ -135,14 +135,18 @@
         }
 
         for(let i=0; i<20; i++){
-            let labels = topWords[i].map(d=>d.word) 
-            let data = topWords[i].map(d=>d.count/totalCount) 
+            let labels = topWords[i].map(d=>d.word)
+            let percentage = 0
+            let data = topWords[i].map(d=>d.count/totalCount)
+            labels.push('others')
+            data.forEach(d=>{percentage += d})
+            data.push(1-percentage)
             const doughnutChartData = {
                 labels: labels,
                 datasets: [
                     {
                         data: data,
-                        backgroundColor: ['#f29ead','#68d2e8','#74e5d1'],
+                        backgroundColor: ['#f29ead','#68d2e8','#74e5d1','#dddddd'],
                     }
                 ]
             };
