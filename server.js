@@ -123,6 +123,7 @@ app.get('/result/:token', async (req, res) => {
                 }
             }
             renderVar.link = `https://word-association-test.herokuapp.com/result/${token}`
+            renderVar.analysisLink = `https://word-association-test.herokuapp.com/analysis/${token}`
             //render dynamic html page to frontend
             res.render('result', renderVar)
         } else {
