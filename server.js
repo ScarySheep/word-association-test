@@ -35,7 +35,7 @@ app.get('/wordlist', async (req, res) => {
     })
 })
 
-//
+//store test to database
 app.post('/store', async (req, res) => {
     let token = req.body.token
     let answer = req.body.answer
@@ -73,7 +73,7 @@ app.post('/store', async (req, res) => {
     }
 })
 
-
+//fetch personal result
 app.get('/result/:token', async (req, res) => {
     //get token from request
     const { token } = req.params
@@ -132,3 +132,60 @@ app.get('/result/:token', async (req, res) => {
         res.status(404).send({ result: 'Ummm I think you got the wrong token...' })
     }
 })
+
+//get analysis
+app.get('/analysis/:token', async (req, res) => {
+    //get token from request
+    const { token } = req.params
+    //basic token check
+    if ((typeof token === 'string' || token instanceof String) && token.length == 8) {
+        //google auth
+        const auth = await google.auth.getClient({ scopes: ['https://www.googleapis.com/auth/spreadsheets'] })
+        const sheets = google.sheets({ version: 'v4', auth })
+        //get the key column
+        const keyRange = `response!A:A`
+        const keyResponse = await sheets.spreadsheets.values.get({
+            spreadsheetId: process.env.SHEET_ID,
+            range: keyRange,
+        })
+        //formatting
+        let keys = []
+        for (row of keyResponse.data.values) for (e of row) keys.push(e)
+        //check if token exist
+        const index = keys.indexOf(token)
+        if (index != -1) {
+            //get data by token
+            const wordlistsRange = `wordlist!B1:U1`
+            const resultRange = `response!B${index + 1}:U${index + 2}`
+            const averageTimeRange = `analysis!B2:AO2`
+            const topWordsRange = `analysis!B4:AO6`
+            const totalCountRange = `analysis!AP2`
+            const resultResponse = await sheets.spreadsheets.values.batchGet({
+                spreadsheetId: process.env.SHEET_ID,
+                ranges: [wordlistsRange, resultRange, averageTimeRange, topWordsRange, totalCountRange],
+            })
+            //formatting
+            let result = resultResponse.data.valueRanges
+            let wordlist = result[0].values[0]
+            let answer = result[1].values[0]
+            let time = result[1].values[1]
+            let averageTime = result[2].values[0].filter(d => d != "")
+            let topWordsRaw = result[3].values
+            let totalCount = result[4].values[0][0]
+            let topWords = []
+            for (let i = 0; i < 20; i++) {
+                let arr = [{ word: topWordsRaw[0][2 * i], count: topWordsRaw[0][2 * i + 1] },
+                { word: topWordsRaw[1][2 * i], count: topWordsRaw[1][2 * i + 1] },
+                { word: topWordsRaw[2][2 * i], count: topWordsRaw[2][2 * i + 1] }]
+                topWords.push(arr)
+            }
+            res.render('analysis', { wordlist: wordlist, answer: answer, time: time, averageTime: averageTime, topWords: topWords, totalCount: totalCount })
+            //res.send({ 'words': wordlist, 'your answer': answer, 'your time': time, 'average time': averageTime, 'top words': topWords, 'total': totalCount })
+        } else {
+            res.status(404).send({ result: 'no data' })
+        }
+    } else {
+        res.status(404).send({ result: 'Ummm I think you got the wrong token...' })
+    }
+})
+

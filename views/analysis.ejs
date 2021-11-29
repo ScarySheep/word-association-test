@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <!--mobile scaling-->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!--google font-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+        <!--custom css-->
+        <link rel="stylesheet" href="../style.css">
+        <!--jquery-->
+        <script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+        <!--chart.js-->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+    </head>
+    <body>
+        <div class="result-container">
+            <p class="error"></p>
+            <h1 class="display">Analysis</h1>
+            <h2 class="analysis-titles">Response time for each phrases</h2>
+            <div class="barChart-container">
+                <canvas id="barChart"></canvas>
+            </div>
+            <h2 class="analysis-titles">Top three common responses for each phrases</h2>
+            <div class="doughnutChart-container">
+                <div class="doughnutChart"><canvas id="doughnutChart0"></canvas></div>
+                <div class="doughnutChart"><canvas id="doughnutChart1"></canvas> </div>
+                <div class="doughnutChart"><canvas id="doughnutChart2"></canvas> </div>
+                <div class="doughnutChart"><canvas id="doughnutChart3"></canvas></div> 
+                <div class="doughnutChart"><canvas id="doughnutChart4"></canvas></div> 
+                <div class="doughnutChart"><canvas id="doughnutChart5"></canvas></div> 
+                <div class="doughnutChart"><canvas id="doughnutChart6"></canvas></div> 
+                <div class="doughnutChart"><canvas id="doughnutChart7"></canvas></div> 
+                <div class="doughnutChart"><canvas id="doughnutChart8"></canvas></div> 
+                <div class="doughnutChart"><canvas id="doughnutChart9"></canvas></div> 
+                <div class="doughnutChart"><canvas id="doughnutChart10"></canvas></div> 
+                <div class="doughnutChart"><canvas id="doughnutChart11"></canvas></div> 
+                <div class="doughnutChart"><canvas id="doughnutChart12"></canvas></div> 
+                <div class="doughnutChart"><canvas id="doughnutChart13"></canvas></div>
+                <div class="doughnutChart"><canvas id="doughnutChart14"></canvas> </div>
+                <div class="doughnutChart"><canvas id="doughnutChart15"></canvas> </div>
+                <div class="doughnutChart"><canvas id="doughnutChart16"></canvas> </div>
+                <div class="doughnutChart"><canvas id="doughnutChart17"></canvas> </div>
+                <div class="doughnutChart"><canvas id="doughnutChart18"></canvas> </div>
+                <div class="doughnutChart"><canvas id="doughnutChart19"></canvas> </div>
+            </div>
+            <a href="https://github.com/ScarySheep/" target="_blank" class="footer">About me</a>
+        </div>        
+    </body>      
+    <script>
+        //data
+        let wordlist = <%- JSON.stringify(wordlist) %>
+        let answer= <%- JSON.stringify(answer) %>
+        let time= <%- JSON.stringify(time) %>
+        let averageTime= <%- JSON.stringify(averageTime) %>
+        let sTime = time.map(d=>Math.round(parseFloat(d)/10)/100)
+        let sAverageTime = averageTime.map(d=>Math.round(parseFloat(d)/10)/100)
+        let topWords = <%- JSON.stringify(topWords) %>
+        let totalCount = <%- JSON.stringify(totalCount) %>
+        //chart
+        const barChartData = {
+            labels: wordlist,
+            datasets: [
+                {
+                    label: 'Your time',
+                    data: sTime,
+                    borderColor: '#f29ead',
+                    backgroundColor: '#f29ead',
+                },
+                {
+                    label: 'Average time',
+                    data: sAverageTime,
+                    borderColor: '#68d2e8',
+                    backgroundColor: '#68d2e8',
+                }
+            ]
+        };
+
+        const barChartConfig = {
+            type: 'bar',
+            data: barChartData,
+            options: {
+                responsive: true,
+                maintainAspectRatio:false,
+                onResize: chartResize,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels:{
+                            font: {
+                                family:"'Roboto Mono', monospace"
+                            }
+                        }
+                    },
+                    title: {
+                        display: false,
+                        text: 'Response time(sec) for each phrases'
+                    }
+                },
+                scales: {
+                    xAxis: {
+                        display: true,
+                        ticks:{
+                            font: {
+                                family:"'Roboto Mono', monospace"
+                            }
+                        }
+                    },
+                    yAxis:{
+                        display:true,
+                        ticks:{
+                            font: {
+                                family:"'Roboto Mono', monospace"
+                            }
+                        }
+                    }
+                }
+            },
+        };
+
+        const barChartCtx = document.getElementById('barChart').getContext('2d')
+        const barChart = new Chart(barChartCtx, barChartConfig)
+
+        function chartResize(chart, size){
+            if(size.width < 768){
+                chart.options.scales.xAxis.display = false
+            }else{
+                chart.options.scales.xAxis.display = true
+            }
+        }
+
+        for(let i=0; i<20; i++){
+            let labels = topWords[i].map(d=>d.word) 
+            let data = topWords[i].map(d=>d.count/totalCount) 
+            const doughnutChartData = {
+                labels: labels,
+                datasets: [
+                    {
+                        data: data,
+                        backgroundColor: ['#f29ead','#68d2e8','#74e5d1'],
+                    }
+                ]
+            };
+
+            const doughnutChartConfig = {
+                type: 'doughnut',
+                data: doughnutChartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio:false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels:{
+                                font: {
+                                    family:"'Roboto Mono', monospace"
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: wordlist[i],
+                            font: {
+                                size: 24,
+                                weight:'normal',
+                                family:"'Roboto Mono', monospace"
+                            }
+                        }
+                    }
+                },
+            };
+            const doughnutChartCtx = document.getElementById(`doughnutChart${i}`).getContext('2d')
+            const doughnutChart = new Chart(doughnutChartCtx, doughnutChartConfig)
+        }
+    </script>
+</html>
